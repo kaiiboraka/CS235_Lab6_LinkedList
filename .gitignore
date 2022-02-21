@@ -1,0 +1,11 @@
+/build
+/.vscode
+/.idea
+/cmake-build-debug
+*.html
+qslab
+out_*
+*.pdf
+*.c
+*.png
+CMakeLists.txt
