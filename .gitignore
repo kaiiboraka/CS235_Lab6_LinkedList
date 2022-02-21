@@ -2,6 +2,7 @@
 /.vscode
 /.idea
 /cmake-build-debug
+/WindowsEndlines
 *.html
 qslab
 out_*
