@@ -43,6 +43,23 @@ public:
 	~LinkedList() override
 	{
 		clear();
+//		Node* node = head;
+//		while (head != nullptr)
+//		{
+//			head = head->next;
+//			delete node;
+//			node = head;
+//		}
+	}
+
+	int size() override
+	{
+		return _size;
+	}
+
+	bool isEmpty() const
+	{
+		return (_size <= 0 || head == nullptr);
 	}
 
 	void clear() override
@@ -51,6 +68,22 @@ public:
 		for (int i = 0; i < clearAmt; i++)
 		{
 			pop_front();
+		}
+	}
+
+	void pop_front()
+	{
+		if (!isEmpty())
+		{
+			//pop_front
+			// new pointer looks at same thing as old head
+			Node* pNode = head;
+			// head now looks at first thing after, inc nullptr
+			head = head->next;
+			// delete pNode
+			delete pNode;
+
+			_size--;
 		}
 	}
 
@@ -66,14 +99,35 @@ public:
 		}
 	}
 
-	int size() override
+	void remove(T value) override
 	{
-		return _size;
-	}
+		// get Position of value
+		Position posToRemove = valExists(value);
+		if (posToRemove.exists)
+		{
+			auto index = posToRemove.index;
 
-	bool isEmpty() const
-	{
-		return (_size <= 0 || head == nullptr);
+			if (size() <= 0)
+			{
+				posToRemove.index = -1;
+			}
+			if (index < 0)
+			{
+				throw out_of_range("index out of range");
+			}
+			else if (index == 0)
+			{
+				pop_front();
+			}
+			else
+			{
+				valExists(at(index - 1)).node->next = posToRemove.node->next;
+				delete posToRemove.node;
+				_size--;
+			}
+
+			//cout << endl << "toString after: " << toString() << endl;
+		}
 	}
 
 	string toString() override
@@ -152,6 +206,11 @@ public:
 			//"head"=newHead->oldHead->next
 			head = newHead;
 			_size++;
+
+		}
+		else
+		{
+			delete newHead;
 		}
 	}
 
@@ -197,53 +256,6 @@ public:
 			node->next = newNode;
 
 			_size++;
-		}
-	}
-
-	void remove(T value) override
-	{
-		// get Position of value
-		Position posToRemove = valExists(value);
-		if (posToRemove.exists)
-		{
-			auto index = posToRemove.index;
-
-			if (size() <= 0)
-			{
-				posToRemove.index = -1;
-			}
-			if (index < 0)
-			{
-				throw out_of_range("index out of range");
-			}
-			else if (index == 0)
-			{
-				pop_front();
-			}
-			else
-			{
-				valExists(at(index - 1)).node->next = posToRemove.node->next;
-				delete posToRemove.node;
-				_size--;
-			}
-
-			//cout << endl << "toString after: " << toString() << endl;
-		}
-	}
-
-	void pop_front()
-	{
-		if (!isEmpty())
-		{
-			//pop_front
-			// new pointer looks at same thing as old head
-			Node* oldHead = head;
-			// head now looks at first thing after, inc nullptr
-			head = head->next;
-			// delete oldHead
-			delete oldHead;
-
-			_size--;
 		}
 	}
 
