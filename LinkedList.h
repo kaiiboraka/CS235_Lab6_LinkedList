@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <typeinfo>
 
 using namespace std;
 
@@ -46,11 +47,11 @@ public:
 
 	void clear() override
 	{
-		for (int i = 0; i < size(); i++)
+		int clearAmt = size();
+		for (int i = 0; i < clearAmt; i++)
 		{
 			pop_front();
 		}
-		_size = 0;
 	}
 
 	T front() const
@@ -77,7 +78,7 @@ public:
 
 	string toString() override
 	{
-		if(!isEmpty())
+		if (!isEmpty())
 		{
 			stringstream ss;
 			for (Node* node = head; node != nullptr; node = node->next)
@@ -118,7 +119,7 @@ public:
 		}
 		else
 		{
-			if(index == 0)
+			if (index == 0)
 			{
 				return head->value;
 			}
@@ -202,15 +203,20 @@ public:
 	void remove(T value) override
 	{
 		// get Position of value
-		auto posToRemove = valExists(value);
+		Position posToRemove = valExists(value);
 		if (posToRemove.exists)
 		{
 			auto index = posToRemove.index;
+
+			if (size() <= 0)
+			{
+				posToRemove.index = -1;
+			}
 			if (index < 0)
 			{
 				throw out_of_range("index out of range");
 			}
-			else if(index == 0)
+			else if (index == 0)
 			{
 				pop_front();
 			}
@@ -220,6 +226,8 @@ public:
 				delete posToRemove.node;
 				_size--;
 			}
+
+			//cout << endl << "toString after: " << toString() << endl;
 		}
 	}
 
